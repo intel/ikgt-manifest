@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 # Copyright (c) 2015 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -90,12 +90,25 @@ below and start from step (2).
  
 On a Linux build machine,
 
+(0) One-time set up for new Linux system
+
+    Get repo tool (make sure your proxy is setup correctly)
+    $ mkdir ~/bin
+    $ PATH=~/bin:$PATH
+    $ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+    $ chmod a+x ~/bin/repo
+
+    Install git
+    $ sudo apt-get install git
+     
+
 (1) Clone the ikgt source files into a working directory (e.g. project) from
     GitHub
    $ mkdir project
    $ cd project
    $ repo init -u https://github.com/01org/ikgt-manifest.git
    $ repo sync
+
 
 (2) Build xmon binaries:
    $ cd ikgt/example-usage/integrity
