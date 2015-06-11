@@ -63,6 +63,7 @@ Build environment
 
 Ubuntu 12.04/14.04 64-bit
 Gcc version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5)
+git-repo (http://source.android.com/source/downloading.html#installing-repo)
 
 =============================================================================
 Target machine Configuration
