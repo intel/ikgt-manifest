@@ -1,4 +1,4 @@
-﻿###############################################################################
+###############################################################################
 # Copyright (c) 2015 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,11 +83,11 @@ The target machine is where iKGT is to be installed.
 Building iKGT binaries
 =============================================================================
 
-The iKGT source can be obtained either from the download page of 01.org site 
-or from the github source code repository. If you have downloaded the source 
-package (i.e. ikgtsrcpkg.tar.gz) from 01.org page, you can skip step (1) 
+The iKGT source can be obtained either from the download page of 01.org site
+or from the github source code repository. If you have downloaded the source
+package (i.e. ikgtsrcpkg.tar.gz) from 01.org page, you can skip step (1)
 below and start from step (2).
- 
+
 On a Linux build machine,
 
 (0) One-time set up for new Linux system
@@ -100,7 +100,6 @@ On a Linux build machine,
 
     Install git
     $ sudo apt-get install git
-     
 
 (1) Clone the ikgt source files into a working directory (e.g. project) from
     GitHub
@@ -108,7 +107,6 @@ On a Linux build machine,
    $ cd project
    $ repo init -u https://github.com/01org/ikgt-manifest.git
    $ repo sync
-
 
 (2) Build xmon binaries:
    $ cd ikgt/example-usage/integrity
@@ -165,7 +163,7 @@ Check cpuid and verify Intel VT-x is being used.
     $ ikgt/xmon/package/check_vtx.sh
 
     If it returns "VTx is not available", it implies the processor VT-x feature
-    is being used.
+    is being used and this is expected when xmon is running.
 
 Check if xmon is running by executing the following utility:
 
@@ -254,6 +252,9 @@ log entries, please refer to iKGT-user-guide.
 Customization
 =============================================================================
 
+XMON Loading Address
+--------------------
+
 Currently the loading address for xmon loader is located at 0x10000000.
 The address may not available for some systems. To avoid unexpected behavior,
 verify if this address is available or not on your system as following.
@@ -272,6 +273,22 @@ verify if this address is available or not on your system as following.
 
     Note: whenever ikgt/loader/pre_os/build_xmon_pkg_linux.sh is modified,
           it is required to rebuild loader by rebuilding ikgt_pkg.bin.
+
+XMON Memory Size
+----------------
+
+The memory size used by XMON is hard-coded by xmon_mem_size to 6 MB. This
+works for typical desktops with 4-8 GB of RAM and 2-4 CPUs. If you wish to
+change this, please modify the value defined in
+pre_os/build_xmon_pkg_linux.sh build script.
+
+This can be adjusted upwards or downwards to accommodate different systems
+and usages. For example systems with large amount of RAM and CPUs will need
+more RAM. For usages in embedded systems the value can similarly be adjusted
+downwards.
+
+Typical indication of failure due to lack of memory is the target screen
+will turn black when booting iKGT.
 
 =============================================================================
 Known problems
