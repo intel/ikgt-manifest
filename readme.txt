@@ -145,7 +145,9 @@ configuration file for xmon boot.
         GRUB_TIMEOUT=20
 
    Save the changes and quit.
-
+   
+   $ sudo update-grub
+   
 This step is needed only when you want to have the chance to select the boot
 entry on the GRUB menu during the boot.
 
