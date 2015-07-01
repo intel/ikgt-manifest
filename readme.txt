@@ -286,11 +286,8 @@ pre_os/build_xmon_pkg_linux.sh build script.
 
 This can be adjusted upwards or downwards to accommodate different systems
 and usages. For example systems with large amount of RAM and CPUs will need
-more RAM. For usages in embedded systems the value can similarly be adjusted
-downwards.
-
-Typical indication of failure due to lack of memory is the target screen
-will turn black when booting iKGT.
+more memory. For usages in embedded systems the value can similarly be 
+adjusted downwards. Target system launch can fail due to lack of memory.
 
 =============================================================================
 Known problems
