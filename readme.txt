@@ -169,7 +169,9 @@ Check cpuid and verify Intel VT-x is being used.
 
 Check if xmon is running by executing the following utility:
 
-    $ ikgt/xmon/package/check_vtx.sh
+    $ cd ikgt/xmon/package/check_ikgt
+    $ make
+    $ ./check_ikgt
 
     If xmon is running, the utility will print out "iKGT is running".
     Xmon runs silently under the existing OS de-privileging it.
