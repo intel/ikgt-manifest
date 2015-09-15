@@ -208,6 +208,65 @@ Check if xmon is running by executing the following utility:
 
     If xmon is running, the utility will print out "iKGT is running".
     Xmon runs silently under the existing OS de-privileging it.
+    
+=============================================================================
+Enabling debug messages
+=============================================================================
+Setting up serial port connection
+Finding serial port address:
+    1. $ dmesg | grep tty
+    2. Check for address associated with the serial port ttyS0. For most machines, 
+       it is <ttyS0 addr> = 0x3f8. 
+
+Note: If serial port address is different on your machine, use that instead of 
+      0x3f8 while following instructions on this section.
+
+Set up connection through serial port:
+    1.Connect your development machine, com1 to another machine, com2 where 
+      you will collect debug messages.
+    2.Install minicom and set up serial port on both machines. Use 115200 as 
+      the baud rate. For more info on this see https://help.ubuntu.com/community/Minicom.
+    3.Test whether serial port is properly setup by typing in minicom on com1 and 
+      see if it's being displayed in on com2 and vice versa.
+
+Kernel Messages
+
+To enable debug output from kernel:
+1.Edit grub default configuration file to print linux kernel log to screen  
+    $ sudo vi /etc/default/grub
+2.Make following changes: 
+    GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200n8". 
+    The ttyS0 should be changed to your real serial port name. 
+If you want log messages before the serial port init, you can change the line as below:          
+    GRUB_CMDLINE_LINUX_DEFAULT="debug ignore_loglevel log_buf_len=10M print_fatal_signals=1 
+    LOGLEVEL=8 earlyprintk=vga,keep sched_debug console=tty0 console=ttyS0,115200n8"
+3. Update grub configuration
+    $ sudo update-grub
+
+Make sure that Linux kernel can print to screen and serial port both. Detail info: 
+https://wiki.archlinux.org/index.php/Boot_debugging
+
+
+Ikgt & Tboot Messages
+
+Enable debug output from tboot, ikgt loader, and ikgt to go on serial port:
+
+1.	Edit grub.d/20_linux_ikgt_tboot file. Edit value of ikt_log and tboot_log 
+        in all instances:
+        
+        if [ -d /sys/firmware/efi ] ; then
+           ikgt_log="iobase=0x3f8"
+           # there's no vga console available under EFI
+           tboot_log="logging=serial,memory serial=115200,8n1,0x3f8 "
+       else
+           ikgt_log="iobase=0x3f8"
+           tboot_log="logging=serial,vga,memory serial=115200,8n1,0x3f8 "
+       fi
+
+   2) Update grub
+       $ sudo update-grub
+
+If you wish to change things only temporarily for current boot, press ‘e’ to edit the selected boot entry in grub menu. Modify ikgt entry as needed, press F10.
 
 =============================================================================
 Uninstalling iKGT
