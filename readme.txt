@@ -340,20 +340,20 @@ Use below commands to verify tboot and iKGT boot-up were successful:
 Setting up configfs and installing ikgt_agent.ko
 =============================================================================
 
-Follow these steps to set up the configfs file system under /config
+Follow these steps to set up the configfs file system under /sys/kernel/config
 
-(1) $ sudo mkdir /config
+(1) $ sudo mkdir //sys/kernel/config
 
 If configfs driver is not installed:
     (2) sudo insmod \
         /lib/modules/<installed-kernel-version>/kernel/fs/configfs/configfs.ko
 
-(3) $ sudo mount -t configfs none /config
+(3) $ sudo mount -t configfs none /sys/kernel/config
 
 (4) $ sudo insmod ikgt_agent.ko
 
-After successful installation, the driver will create /config/ikgt_agent as its
-configuration space. The resource to be monitored and policy actions can now
+After successful installation, the driver will create /sys/kernel/config/ikgt_agent
+as its configuration space. The resource to be monitored and policy actions can now
 be specified by creating directories and files in this space.
 
 ==============================================================================
@@ -368,10 +368,10 @@ where
    <base_dir> is the base directory under which the resource directories
               are to be created
 
-    $ sudo python parse_policy.py -f policy.json -b /config/ikgt_agent
+    $ sudo python parse_policy.py -f policy.json -b /sys/kernel/config/ikgt_agent
 
 You can check the new entries in configfs by executing following command
-    $ tree /config
+    $ tree /sys/kernel/config
 
 Above command should create directories and files based on the contents
 of .json file. The example policy enables monitoring of following resources
@@ -392,9 +392,9 @@ For example, if the OS tries to modify CR0:WP, the event will be logged
 but will be allowed. Similarly, if the OS tries to modify EFER, the event will
 be logged and the violating instruction will be skipped.
 
-The contents of the log can be seen in /config/ikgt-agent/log/log.txt
+The contents of the log can be seen in /sys/kernel/config/ikgt-agent/log/log.txt
 
-$cat /config/ikgt_agent/log/log.txt
+$cat /sys/kernel/config/ikgt_agent/log/log.txt
 
             cpu=0, sequence-number=19, resource-name=CR0, access=write,
             value=0x80050033, RIP=0x81055074, action=LOG_SKIP
@@ -402,7 +402,7 @@ $cat /config/ikgt_agent/log/log.txt
 You can use the python script, parse_log.py, to get a more descriptive
 output of each event log entry.
 
-$ sudo python parse_log.py /config/ikgt-agent/log/log.txt <output_log_file>
+$ sudo python parse_log.py /sys/kernel/config/ikgt-agent/log/log.txt <output_log_file>
 
 Example output:
      cpu=0, sequence-number=3, resource-name=msr[0xc0000080], access=write,
