@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-##############################################################################
+###############################################################################
 
 This readme covers instructions for building and launching iKGT framework and
 example usage (integrity) components.
@@ -21,69 +21,77 @@ example usage (integrity) components.
 Release Notes
 =============================================================================
 
-Release v1.1 (this release)
+Release v1.2 (This release)
+------------
 
-(1) Support for booting iKGT with TXT/tboot
-(2) Hypercall interface and in/out buffer security enhancemts
-(3) Log message enhancements and python script for instruction address
-    attribution
+  (1) Support for UEFI boot
+
+Release v1.1
+------------
+
+  (1) Support for booting iKGT with TXT/tboot
+  (2) Hypercall interface and in/out buffer security enhancemts
+  (3) Log message enhancements and python script for instruction address
+      attribution
 
 Release v1.0.1
+------------
 
-(1) Added fix for CoreOS.
+  (1) Added fix for CoreOS.
 
 Release v1.0
+------------
 
-(1) The current release v1.0 only supports monitoring of CR0, CR4 and limited
-    set of MSRs. For details of which specific bits in CR0/CR4 and which MSRs
-    are supported, refer to cr0_bits, cr4_bits, and msr_regs in driver/cr0.c,
-    driver/cr4.c, and driver/msr.c respectively.
+  (1) The current release v1.0 only supports monitoring of CR0, CR4 and limited
+      set of MSRs. For details of which specific bits in CR0/CR4 and which MSRs
+      are supported, refer to cr0_bits, cr4_bits, and msr_regs in driver/cr0.c,
+      driver/cr4.c, and driver/msr.c respectively.
 
-(2) Monitoring of certain bits in CR0 and CR4 may cause system instability
-    on certain platforms. For example, CR4.SMAP bit is supported only on
-    5th generation of Core i processors and enabling of the SMAP bit on
-    system that has older version of the Core i processors may hang the
-    system.
+  (2) Monitoring of certain bits in CR0 and CR4 may cause system instability
+      on certain platforms. For example, CR4.SMAP bit is supported only on
+      5th generation of Core i processors and enabling of the SMAP bit on
+      system that has older version of the Core i processors may hang the
+      system.
 
 =============================================================================
 Content of the Source Package
 =============================================================================
 
    ikgt/
-   ├───readme.txt          /* this file */
-   ├───xmon/
-   │   ├───Makefile
-   │   ├───common/         /* common header files */
-   │   │   └───include/
-   │   │       └───...
-   │   ├───core/           /* generic xmon core */
-   │   │   ├───common/
-   │   │   │   └───...
-   │   │   ├───include/
-   │   │   │   └───...
-   │   │   ├───vmexit/
-   │   │   │   └───...
-   │   │   ├───vmx/
-   │   │   │   └───...
-   │   │   └───...
-   │   ├───api/            /* xmon API */
-   │   │   └───...
-   │   ├───package/        /* ikgt install/uninstall scripts */
-   │   │   └───...
-   │   ├───loader/         /* pre-os xmon loader */
-   │   │   └───...
-   │   └───plugins/        /* xmon-plugin for supporting integrity use case */
-   │       └───ikgt-plugin
-   │           └───...
-   └───example-usage/
-       └───integrity/
-           ├───Makefile
-           ├───policy/     /* example policy (.json) and install script */
-           │   └───...
-           ├───driver/     /* example driver to configure policy        */
-           │   └───...
-           └───handler/    /* example vmx-root policy plugin module     */
-               └───...
+   +---readme.txt          /* this file */
+   +---xmon/
+   �   +---Makefile
+   �   +---common/         /* common header files */
+   �   �   +---include/
+   �   �       +---...
+   �   +---core/           /* generic xmon core */
+   �   �   +---common/
+   �   �   �   +---...
+   �   �   +---include/
+   �   �   �   +---...
+   �   �   +---vmexit/
+   �   �   �   +---...
+   �   �   +---vmx/
+   �   �   �   +---...
+   �   �   +---...
+   �   +---api/            /* xmon API */
+   �   �   +---...
+   �   +---package/        /* ikgt install/uninstall scripts */
+   �   �   +---...
+   �   +---loader/         /* pre-os xmon loader */
+   �   �   +---...
+   �   +---plugins/        /* xmon-plugin for supporting integrity use case */
+   �       +---ikgt-plugin
+   �           +---...
+   +---example-usage/
+       +---integrity/
+           +---Makefile
+           +---policy/     /* example policy (.json) and install script */
+           �   +---...
+           +---driver/     /* example driver to configure policy        */
+           �   +---...
+           +---handler/    /* example vmx-root policy plugin module     */
+               +---...
 
 =============================================================================
 Build environment
@@ -129,12 +137,20 @@ On a Linux build machine,
     Install git
     $ sudo apt-get install git
 
+	Note: If you want to load IKGT on UEFI platform, a few additional steps are
+          required. Please refer to section Running IKGT on UEFI Platforms at
+          the end of this document.
+
 (1) Clone the ikgt source files into a working directory (e.g. project) from
     GitHub
    $ mkdir project
    $ cd project
    $ repo init -u https://github.com/01org/ikgt-manifest.git
    $ repo sync
+
+   Note: If you want to use the UEFI loader, you need to use a different
+         manifest file to down load UEFI preloader and UEFI xmon loader.
+         Please refer to Running IKGT on UEFI Platforms section for details.
 
 (2) Build ikgt binaries:
    $ cd ikgt/example-usage/integrity
@@ -197,7 +213,7 @@ Check cpuid and verify Intel VT-x is being used.
 
     $ ikgt/xmon/package/check_vtx.sh
 
-    If it returns "VTx is not available", it implies the processor VT-x 
+    If it returns "VTx is not available", it implies the processor VT-x
     feature is being used and this is expected when xmon is running.
 
 Check if xmon is running by executing the following utility:
@@ -208,65 +224,6 @@ Check if xmon is running by executing the following utility:
 
     If xmon is running, the utility will print out "iKGT is running".
     Xmon runs silently under the existing OS de-privileging it.
-    
-=============================================================================
-Enabling debug messages
-=============================================================================
-Setting up serial port connection
-Finding serial port address:
-    1. $ dmesg | grep tty
-    2. Check for address associated with the serial port ttyS0. For most machines, 
-       it is <ttyS0 addr> = 0x3f8. 
-
-Note: If serial port address is different on your machine, use that instead of 
-      0x3f8 while following instructions on this section.
-
-Set up connection through serial port:
-    1.Connect your development machine, com1 to another machine, com2 where 
-      you will collect debug messages.
-    2.Install minicom and set up serial port on both machines. Use 115200 as 
-      the baud rate. For more info on this see https://help.ubuntu.com/community/Minicom.
-    3.Test whether serial port is properly setup by typing in minicom on com1 and 
-      see if it's being displayed in on com2 and vice versa.
-
-Kernel Messages
-
-To enable debug output from kernel:
-1.Edit grub default configuration file to print linux kernel log to screen  
-    $ sudo vi /etc/default/grub
-2.Make following changes: 
-    GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200n8". 
-    The ttyS0 should be changed to your real serial port name. 
-If you want log messages before the serial port init, you can change the line as below:          
-    GRUB_CMDLINE_LINUX_DEFAULT="debug ignore_loglevel log_buf_len=10M print_fatal_signals=1 
-    LOGLEVEL=8 earlyprintk=vga,keep sched_debug console=tty0 console=ttyS0,115200n8"
-3. Update grub configuration
-    $ sudo update-grub
-
-Make sure that Linux kernel can print to screen and serial port both. Detail info: 
-https://wiki.archlinux.org/index.php/Boot_debugging
-
-
-Ikgt & Tboot Messages
-
-Enable debug output from tboot, ikgt loader, and ikgt to go on serial port:
-
-1.	Edit grub.d/20_linux_ikgt_tboot file. Edit value of ikt_log and tboot_log 
-        in all instances:
-        
-        if [ -d /sys/firmware/efi ] ; then
-           ikgt_log="iobase=0x3f8"
-           # there's no vga console available under EFI
-           tboot_log="logging=serial,memory serial=115200,8n1,0x3f8 "
-       else
-           ikgt_log="iobase=0x3f8"
-           tboot_log="logging=serial,vga,memory serial=115200,8n1,0x3f8 "
-       fi
-
-   2) Update grub
-       $ sudo update-grub
-
-If you wish to change things only temporarily for current boot, press ‘e’ to edit the selected boot entry in grub menu. Modify ikgt entry as needed, press F10.
 
 =============================================================================
 Uninstalling iKGT
@@ -521,4 +478,151 @@ Known problems
 (2) Shutdown or reboot will lead to system hanging, if system was booted
     with tboot and iKGT. The issue will be fixed in future release.
 
+
+
+=============================================================================
+Running IKGT on UEFI Platforms
+=============================================================================
+
+Dev System Tool chain
+---------------------
+
+Note: The current version of UEFI loader works only when built with a specific
+      version of GCC tool-chain. Newer GCC versions have a linker issue that is
+      currently under debug. On your Ubuntu dev system, make sure you install
+      and use the right versions of tools as described below:
+
+Install gcc 4.6
+
+	$ sudo apt-get update
+	$ sudo apt-get install gcc-4.6 build-essential
+
+	$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 20
+	$ sudo update-alternatives --config gcc
+
+    $ gcc -v
+
+Install GNU Linker 2.22
+
+	$ wget https://launchpad.net/ubuntu/+archive/primary/+files/binutils_2.22-6ubuntu1.3_amd64.deb
+    $ sudo dpkg -i binutils_2.22-6ubuntu1.3_amd64.deb
+
+    $ ld -v
+
+Get IKGT source and build iKGT
+------------------------------
+
+Use special manifest to checkout UEFI loader. This loader checks out preloader
+EFI app and UEFI version of xmon loader from a different repo.
+
+   $ mkdir r1.2
+   $ cd r1.2
+   $ repo init -u https://github.com/01org/ikgt-manifest.git -m default-uefi.xml
+   $ repo sync
+   $ cd ikgt/example-usage/integrity
+   $ make
+
+It will generate ikgt_pkg.bin in r1.2/ikgt/xmon/bin/linux/release
+
+Building UEFI bootloader
+------------------------
+
+$ cd ikgt/xmon/loader/uefi_bootloader
+$ ./build.sh
+
+It will generate the preload_x64.efi in the out/ folder
+
+Testing the UEFI loader
+------------------------
+
+On Dev Machine:
+- Prepare USB disk with FAT32 file system. Call it USB1
+- Copy ikgt_pkg.bin and preload_64.efi in the root directory of USB1
+
+Systems that have EFI 64 shell
+------------------------------
+
+- Insert USB1 in the test system
+- Boot your UEFI system to EFI shell
+- Enter FS<n>: to go to your USB
+- Launch preload_x64.efi
+- You will see several debug messages. After launching ikgt, the control will
+  come back to EFI shell
+
+Systems that do not have EFI shell
+----------------------------------
+
+You need ability to start EFI shell. Boot-manager rEFInd is one option.
+http://www.rodsbooks.com/refind/getting.html
+
+On Dev System:
+- Get the rEFInd from soureforge. We need a USB flash drive image file0.
+
+You can get the latest package here:
+http://sourceforge.net/projects/refind/files/0.9.2/refind-flashdrive-0.9.2.zip/download
+
+- Format a USB with FAT32 file system. Call it USB2
+
+- Unzip the package and flash to USB disk (for Ubuntu)
+  $ unzip refind-flashdrive-0.9.2.zip
+  $ cd refind-flashdiver-0.9.2
+
+NOTE: First find out where your USB is mounted using mount command.
+      Be careful to not accidentally dd on you HDD
+
+  $ dd if=refind-flashdrive-0.9.2.img of=/dev/sd<xx>
+
+This will prepare  your bootable USB. When you boot using this USB, it starts rEFInd boot
+manager, which has EFI shell.
+
+On the test system:
+- Change the BIOS setting to EFI boot
+- Boot from rEFInd USB device USB2. You should see rEFInd menu.
+- Start EFI shell from rEFInd menu
+- Insert the USB1 (containing preload_64.efi, ikgt_pkg.bin)in the test machine
+- Go to the usb drive, by typing �FS<number>: �
+- Type map -r to see the partition list
+- Type ls to see the two files you copied earlier
+- Run preload_x64.efi
+- You will see several debug messages. After launching ikgt, the control will
+  come back to EFI shell
+
+Launching Linux
+---------------
+
+You can now launch Linux from EFI shell as usual.
+
+Example:
+
+- On HP Elite Desk Core i5 5th generation system running Ubuntu 14.04, Linux can be
+  launched via EFI application named grubx64.efi. On tihs system the EFI partition
+  is mounted at /boot/efi and grubx64.efi can be accessed from /boot/efi/EFI/ubuntu.
+  You can manually launch this application from the EFI shell to get to grub menu.
+- After launching IKGT, when the control returns to EFI shell, go to your HDD EFI
+  partition by typing
+
+  FS<n>:
+  cd  EFI
+  cd ubuntu
+  grubx64.efi
+
+This will bring up grub menu. If you have multiple options in grub menu,
+choose Linux only option. IKGT is already running.
+
+After Linux boots, open a terminal window and type following to check if IKGT
+is running
+    $ r1.2/ikgt/xmon/package/check_vtx.sh
+    $ r1.2/ikgt/xmon/package/check_ikgt/check_ikgt
+
+Know Issues:
+------------
+
+We have done limited testing of UEFI loader on select few OEM platforms
+including HP Elite Desk, Lenovo Thinkcentre, and Sony ultrabooks.
+  - Works only with GCC 4.6 and ld 2.22
+  - IKGT launch hangs on Lenovo X230
+  - Linux boot hangs on a Lenovo and Sony platforms
+
+
 End of file
+

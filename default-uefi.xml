@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <remote fetch="https://github.com/01org/"  name="github" review="https://github.com/01org/ikgt-manifest.git"/>
+  <default remote="github"  revision="refs/heads/master"/>
+  <project path="ikgt/xmon"                     name="ikgt-core"    revision="refs/heads/master"/>
+  <project path="ikgt/xmon/loader"              name="ikgt-uefi-loader"  revision="refs/heads/master"/>
+  <project path="ikgt/xmon/api"                 name="ikgt-api"     revision="refs/heads/master"/>
+  <project path="ikgt/xmon/plugins/ikgt-plugin" name="ikgt-plugin" revision="refs/heads/master"/>
+  <project path="ikgt/example-usage/integrity"  name="ikgt-usage"  revision="refs/heads/master"/>
+
+</manifest>
