@@ -60,36 +60,36 @@ Content of the Source Package
    ikgt/
    +---readme.txt          /* this file */
    +---xmon/
-   ¦   +---Makefile
-   ¦   +---common/         /* common header files */
-   ¦   ¦   +---include/
-   ¦   ¦       +---...
-   ¦   +---core/           /* generic xmon core */
-   ¦   ¦   +---common/
-   ¦   ¦   ¦   +---...
-   ¦   ¦   +---include/
-   ¦   ¦   ¦   +---...
-   ¦   ¦   +---vmexit/
-   ¦   ¦   ¦   +---...
-   ¦   ¦   +---vmx/
-   ¦   ¦   ¦   +---...
-   ¦   ¦   +---...
-   ¦   +---api/            /* xmon API */
-   ¦   ¦   +---...
-   ¦   +---package/        /* ikgt install/uninstall scripts */
-   ¦   ¦   +---...
-   ¦   +---loader/         /* pre-os xmon loader */
-   ¦   ¦   +---...
-   ¦   +---plugins/        /* xmon-plugin for supporting integrity use case */
-   ¦       +---ikgt-plugin
-   ¦           +---...
+   Â¦   +---Makefile
+   Â¦   +---common/         /* common header files */
+   Â¦   Â¦   +---include/
+   Â¦   Â¦       +---...
+   Â¦   +---core/           /* generic xmon core */
+   Â¦   Â¦   +---common/
+   Â¦   Â¦   Â¦   +---...
+   Â¦   Â¦   +---include/
+   Â¦   Â¦   Â¦   +---...
+   Â¦   Â¦   +---vmexit/
+   Â¦   Â¦   Â¦   +---...
+   Â¦   Â¦   +---vmx/
+   Â¦   Â¦   Â¦   +---...
+   Â¦   Â¦   +---...
+   Â¦   +---api/            /* xmon API */
+   Â¦   Â¦   +---...
+   Â¦   +---package/        /* ikgt install/uninstall scripts */
+   Â¦   Â¦   +---...
+   Â¦   +---loader/         /* pre-os xmon loader */
+   Â¦   Â¦   +---...
+   Â¦   +---plugins/        /* xmon-plugin for supporting integrity use case */
+   Â¦       +---ikgt-plugin
+   Â¦           +---...
    +---example-usage/
        +---integrity/
            +---Makefile
            +---policy/     /* example policy (.json) and install script */
-           ¦   +---...
+           Â¦   +---...
            +---driver/     /* example driver to configure policy        */
-           ¦   +---...
+           Â¦   +---...
            +---handler/    /* example vmx-root policy plugin module     */
                +---...
 
@@ -145,6 +145,12 @@ On a Linux build machine,
     GitHub
    $ mkdir project
    $ cd project
+   
+To get stable release, e.g. v1.2:
+   $ repo init -u https://github.com/01org/ikgt-manifest.git -b release_1_2
+   $ repo sync
+
+To get top of master:
    $ repo init -u https://github.com/01org/ikgt-manifest.git
    $ repo sync
 
@@ -517,7 +523,7 @@ EFI app and UEFI version of xmon loader from a different repo.
 
    $ mkdir r1.2
    $ cd r1.2
-   $ repo init -u https://github.com/01org/ikgt-manifest.git -m default-uefi.xml
+   $ repo init -u https://github.com/01org/ikgt-manifest.git -b release_1_2 -m default-uefi.xml
    $ repo sync
    $ cd ikgt/example-usage/integrity
    $ make
@@ -580,7 +586,7 @@ On the test system:
 - Boot from rEFInd USB device USB2. You should see rEFInd menu.
 - Start EFI shell from rEFInd menu
 - Insert the USB1 (containing preload_64.efi, ikgt_pkg.bin)in the test machine
-- Go to the usb drive, by typing “FS<number>: “
+- Go to the usb drive, by typing Â“FS<number>: Â“
 - Type map -r to see the partition list
 - Type ls to see the two files you copied earlier
 - Run preload_x64.efi
@@ -614,7 +620,7 @@ is running
     $ r1.2/ikgt/xmon/package/check_vtx.sh
     $ r1.2/ikgt/xmon/package/check_ikgt/check_ikgt
 
-Know Issues:
+Known Issues:
 ------------
 
 We have done limited testing of UEFI loader on select few OEM platforms
