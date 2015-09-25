@@ -3,10 +3,10 @@
 
   <remote fetch="https://github.com/01org/"  name="github" review="https://github.com/01org/ikgt-manifest.git"/>
   <default remote="github"  revision="refs/heads/master"/>
-  <project path="ikgt/xmon"                     name="ikgt-core"    revision="refs/heads/master"/>
-  <project path="ikgt/xmon/loader"              name="ikgt-loader"  revision="refs/heads/master"/>
-  <project path="ikgt/xmon/api"                 name="ikgt-api"     revision="refs/heads/master"/>
-  <project path="ikgt/xmon/plugins/ikgt-plugin" name="ikgt-plugin" revision="refs/heads/master"/>
-  <project path="ikgt/example-usage/integrity"  name="ikgt-usage"  revision="refs/heads/master"/>
+  <project path="ikgt/xmon"                     name="ikgt-core"    revision="refs/heads/release_1_2"/>
+  <project path="ikgt/xmon/loader"              name="ikgt-loader"  revision="refs/heads/release_1_2"/>
+  <project path="ikgt/xmon/api"                 name="ikgt-api"     revision="refs/heads/release_1_2"/>
+  <project path="ikgt/xmon/plugins/ikgt-plugin" name="ikgt-plugin" revision="refs/heads/release_1_2"/>
+  <project path="ikgt/example-usage/integrity"  name="ikgt-usage"  revision="refs/heads/release_1_2"/>
 
 </manifest>
