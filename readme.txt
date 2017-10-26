@@ -148,12 +148,12 @@ On a Linux build machine,
 
 To get release stable version, e.g. v1.2: 
 
-   $ repo init -u https://github.com/01org/ikgt-manifest.git -b release_1_2
+   $ repo init -u https://github.com/intel/ikgt-manifest.git -b release_1_2
    $ repo sync
 
 To get top of master (may not be stable)
 
-   $ repo init -u https://github.com/01org/ikgt-manifest.git
+   $ repo init -u https://github.com/intel/ikgt-manifest.git
    $ repo sync
 
    Note: If you want to use the UEFI loader, you need to use a different
@@ -525,7 +525,7 @@ EFI app and UEFI version of xmon loader from a different repo.
 
    $ mkdir r1.2
    $ cd r1.2
-   $ repo init -u https://github.com/01org/ikgt-manifest.git -b release_1_2 -m default-uefi.xml
+   $ repo init -u https://github.com/intel/ikgt-manifest.git -b release_1_2 -m default-uefi.xml
    $ repo sync
    $ cd ikgt/example-usage/integrity
    $ make
